@@ -1,0 +1,8 @@
+.carousel-div {
+    width: 100%;
+    height: 500px;
+}
+
+.carousel .thumb {
+    height: 50px !important;
+}
