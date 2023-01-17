@@ -1,0 +1,321 @@
+/* Forgot password */
+.button-send-pw {
+    background-color: lightgreen;
+    margin-left: 10px;
+    height: 34px;
+    width: 40px;
+    border: 1px solid green;
+}
+
+.button-send-pw:hover {
+    background-color: rgb(31, 182, 31);
+    color: aliceblue;
+}
+
+#hidden-code {
+    margin-top: 40px;
+    opacity: 0;
+}
+
+.button-reset-pw {
+    background-color: rgb(48, 221, 48);
+    border: 1px solid green;
+    margin-top: 20px;
+    width: 90px;
+    height: 25px;
+    color: rgb(92, 9, 9);
+    margin-left: 217px;
+}
+
+.button-reset-pw:hover {
+    background-color: rgb(14, 173, 14);
+    color: black;
+}
+
+/* profile */
+
+.main-profile {
+    background: rgb(197 234 235 / 43%);
+    /* background: linear-gradient(135deg, rgb(255, 255, 255) 0%,     rgba(255, 255, 255, 0.726) 100%); */ 
+    width: 50%;
+    height: 700px;
+    border: 1px solid black;
+    border-radius: 2%;
+    margin: 50px auto;
+    margin-bottom: 70px;
+}
+
+.img-avatar {
+    width: 200px;
+    height: 200px;
+    margin: 25px auto;
+}
+
+.img-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10%;
+    margin-top: 10px;
+}
+
+.name-profile {
+    text-align: center;
+    margin-top: -10px;
+}
+
+#profile-ul {
+    list-style-type: none;
+    margin-left: 154px;
+    margin-top: 30px;
+}
+
+#profile-ul div,li {
+    margin-top: 10px;
+}
+
+.change-pw-profile {
+    margin-left: 23%;
+    margin-top: 50px;
+    color: blue;
+}
+
+.change-pw-profile:hover {
+    color: rgb(93, 93, 231);
+}
+
+.update-profile-btn {
+    background-color: rgb(63, 204, 63);
+    border: 1pX solid green;
+    padding: 5px;
+    margin-left: 32%;
+    margin-top: 50px;
+    opacity: 0;
+}
+
+.update-profile-btn:hover {
+    background-color: rgb(157, 228, 87);
+    color: black;
+    border: 1px solid rgba(252, 18, 18, 0.644);
+}
+
+.set-address {
+    display: none;
+}
+
+.fa-pencil-square-o:hover {
+    color: rgb(240, 148, 28);
+    width: 20px;
+    height: 20px;
+}
+
+/* change pasword */
+.change-pw-main {
+    background: rgb(197 234 235 / 43%);
+    /* background: linear-gradient(135deg, rgb(255, 255, 255) 0%,     rgba(255, 255, 255, 0.726) 100%); */ 
+    width: 40%;
+    height: 300px;
+    border: 1px solid black;
+    border-radius: 2%;
+    margin: 50px auto;
+    margin-bottom: 150px;
+}
+
+.change-pw-main > div {
+    margin-left: 29%;
+}
+
+.btn-change-pw {
+    background-color: rgb(63, 204, 63);
+    border: 1pX solid green;
+    padding: 5px;
+    margin-left: 65%;
+    margin-top: 30px;
+}
+
+ /* Order  */
+.main-order {
+    width: 70%;
+    /* height: 800px; */
+    margin-left: 15%;
+    margin-bottom: 100px;
+    padding: 60px;
+    padding-left: 100px;
+    background-image: url("https://res.cloudinary.com/dykzla512/image/upload/v1673666125/HotelManagement/bg-relik_uoa9ph.png");
+    /* background-repeat: no-repeat; */
+    font-size: 20px;
+    font-family: 'Times New Roman', Times, serif;
+    border-radius: 3%;
+    border: 1px solid lightgray;
+}
+
+.select-type-order > span {
+    margin-right: 20px;
+}
+
+.select-type-order > select {
+    width: 120px;
+    height: 30px;
+    text-align: center;
+}
+
+.select-order{
+    margin-top: 30px;
+}
+
+.select-order span {
+    margin-right: 15px;
+}
+
+.select-order input {
+    height: 30px;
+    width: 150px;
+    padding-left: 5px;
+}
+
+.select-order > select {
+    width: 70px;
+    height: 30px;
+    text-align: center;
+}
+
+.main-order-select {
+    margin-top: 50px;
+    display: flex;
+}
+
+.list-room-order {
+    width: 50%;
+    height: 550px;
+    overflow: auto;
+}
+
+.list-service-order {
+    margin-left: 70px;
+    width: 40%;
+    height: 550px;
+    overflow: auto;
+}
+
+.btn-order {
+    background-color: rgba(0, 0, 0, 0.726);
+    color: aliceblue;
+    cursor: pointer;
+    width: 120px;
+    font-size: 18px;
+    height: 37px;
+    margin-top: 70px;
+    margin-left: 80%;
+}
+
+.btn-order:hover {
+    background-color: black;
+    color: rgb(255, 223, 182);
+}
+
+/* history */
+.main-history {
+    width: 80%;
+    margin-left: 10%;
+    margin-bottom: 50px;
+    padding-bottom: 30px;
+    padding-top: 1px;
+    background-image: url("https://res.cloudinary.com/dykzla512/image/upload/v1673666125/HotelManagement/bg-relik_uoa9ph.png");
+}
+
+.btn-cancel-order {
+    width: 50px;
+    height: 30px;
+    margin-right: 10px;
+    background-color: #fb5252;
+    border: 1px solid red;
+    cursor: pointer;
+}
+
+.btn-cancel-order:hover {
+    background-color: #cd0000;
+}
+
+.btn-payment-order {
+    width: 90px;
+    height: 30px;
+    background-color: rgb(9 167 9);
+    border: 1px solid green;
+    cursor: pointer;
+}
+
+.btn-payment-order:hover {
+    background-color: green;
+}
+
+/* OrderStaff */
+
+.table-order-staff {
+    width: 90%;
+    margin-left: 5%;
+    text-align: left;
+    margin-bottom: 100px;
+    border: 1;
+}
+
+.table-order-staff  tr {
+    height: 30px;
+}
+
+.table-order-staff td {
+    padding-left: 10px;
+}
+
+.btn-cancel-list-order {
+    background-color: #dd6a6ac0;
+    border: 1px solid rgb(143, 0, 0);
+    padding: 5px;
+    height: 25px;
+    width: 50px;
+    cursor: pointer;
+}
+
+.btn-cancel-list-order:hover {
+    background-color: #cd0000;
+    color: aliceblue;
+}
+
+.btn-payment-list-order {
+    background-color: #65b973c4;
+    border: 1px solid rgb(0, 43, 7);
+    padding: 5px;
+    height: 25px;
+    width: 100px;
+    cursor: pointer;
+}
+
+.btn-payment-list-order:hover {
+    background-color: #0b5517;
+    color: azure;
+}
+
+.btn-cancel-list-order-dis {
+    background-color: #ee9c9cc0;
+    border: 1px solid rgb(226, 177, 177);
+    padding: 5px;
+    height: 25px;
+    width: 50px;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+}
+
+.btn-payment-list-order-dis {
+    background-color: #62a56d8f;
+    border: 1px solid rgba(77, 153, 90, 0.534);
+    padding: 5px;
+    height: 25px;
+    width: 100px;
+    color: white;
+    cursor: pointer;
+}
+
+/* staff create new order  */
+
+.list-acc-create-order {
+    height: 300px;
+    overflow: auto;
+}

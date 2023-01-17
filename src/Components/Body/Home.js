@@ -1,43 +1,21 @@
 import React from "react";
-import Rooms from "./Client/Rooms";
-import SearchHome from "./Client/Search";
 import CarouselHome from "./Carousel";
-//
 import { ReactDOM } from "react";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-
-
-
-
+import Rooms from "./Client/Rooms";
 
 const Home = () => {
-        
-    return(
-        <>  <div>
-            <CarouselHome/>
-
-            </div>
-            <SearchHome/>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-        </>
-    )
-}
+  return (
+    <>
+      {" "}
+      <div>
+        <CarouselHome />
+      </div>
+      <hr style={{ color: "#d37428" }} />
+      <div>
+        <h2 id="list-rooms">Phòng</h2>
+        <Rooms />
+      </div>
+    </>
+  );
+};
 export default Home;

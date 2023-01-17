@@ -1,14 +1,15 @@
 .background-header {
     width: 100%;
-    background-color: hsla(89, 43%, 51%, 0.3);
-    height: 30px;
+    background-color: hsl(0, 0%, 0%);
+    height: 50px;
 }
 
 .item-menu {
     text-decoration: none;
-    color: black;
+    color: white;
     padding: 5px 30px;
     height: 100%;
+    padding-top: 20px;
 }
 
 .item-menu:hover {

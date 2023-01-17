@@ -1,0 +1,111 @@
+/* room detail */
+
+.info-room-main {
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+.des-room-detail {
+    letter-spacing: 0.03em;
+    text-align: center;
+    font-family: verdana,geneva,sans-serif;
+}
+
+.info-gr {
+    margin: 40px auto;
+    width: 500px;
+    height: 120px;
+    border: 1px solid lightgray;
+    font-size: 20px;
+    padding: 20px;
+    border-radius: 2px;
+    background-color: rgba(211, 211, 211, 0.527);
+    background-image: url("https://grandkatavip.com/asset_grandkatavip/images/icon/bg.jpg");
+}
+
+.info-gr > div {
+    text-align: center;
+}
+
+  /* Comment */
+
+.list-comment {
+    width: 60%;
+    margin-left: 20%;
+}
+
+.write-cmt {
+    margin-bottom: 50px;
+}
+
+.comment {
+    height: 150px;
+    border: 1px solid lightgray;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: rgba(250, 235, 215, 0.5);
+}
+
+.comment img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-bottom: -27px;
+}
+
+.comment > span {
+    color: black;
+    font-size: 20px;
+    margin-left: 77px;
+}
+.comment > div {
+    margin-top: -34px;
+    margin-left: 77px;
+    font-size: 20px;
+}
+
+.content-cmt {
+    margin-top: 15px !important;
+    padding-top: 10px;
+    border-top: 1px solid lightgray;
+}
+
+#comt-content {
+    margin-top: 10px;
+    width: 100%;
+    height: 70px;
+    font-size: 17px;
+}
+
+.cmt-btn {
+    width: 70px;
+    cursor: pointer;
+    height: 28px;
+    margin-left: auto;
+    background-color: rgb(62, 199, 69);
+    color: rgb(0, 0, 0);
+}
+
+.cmt-btn:hover {
+    background-color: black;
+    color: white;
+}
+
+.more-comment {
+    font-size: 17px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.more-comment > input {
+    background-color: white;
+    border: 1px solid white;
+    font-size: 17px;
+}
+
+.more-comment > input:hover {
+    color: rgb(46, 43, 218);
+    cursor: pointer;
+}
