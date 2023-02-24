@@ -4,12 +4,14 @@ import { AlertWarning } from "../../../../Alert/Warning";
 import { AlertOk } from "../../../../Alert/AlertOk";
 import { AlertError } from "../../../../Alert/Error";
 import { CanvasJSChart, CanvasJS } from "canvasjs-react-charts";
+import CheckRefreshToken from "../../../../../Utils/CheckRefreshToken";
 
 const Visitor = () => {
   const [data, setData] = useState([]);
 
   const getData = () => {
     let api = URL + "Statistics/visitor";
+    CheckRefreshToken();
     fetch(api, {
       method: "GET",
       headers: {
@@ -63,7 +65,14 @@ const Visitor = () => {
       }}
     >
       <div>
-        <h1 style={{ textAlign: "center", marginBottom: "50px" }}>
+        <h1
+          style={{
+            textAlign: "center",
+            marginBottom: "50px",
+            fontFamily: "Dancing Script",
+            fontSize: "50px",
+          }}
+        >
           Số khách/phòng
         </h1>
         <CanvasJSChart options={options} />

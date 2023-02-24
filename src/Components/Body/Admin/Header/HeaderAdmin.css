@@ -1,0 +1,32 @@
+.amount-feeback {
+    padding: 0 5px;
+    background-color: red;
+    border-radius: 50%;
+    color: white !important;
+}
+
+#statictis-revenue {
+}
+
+#statictis-revenue ul {
+    /* display: inline-block;
+    padding: 0;
+    margin: 0;
+    opacity: 1; */
+    list-style-type: none;
+    display: none;
+    position: absolute;
+    margin-left: 190px;
+    margin-top: -1px;
+    background-color: black;
+    padding: 10px 0 10px 0
+}
+
+#statictis-revenue:hover  > ul{
+    /* top: 100%;
+    opacity: 1;
+    z-index: 1;
+    visibility: visible; */
+    display: block;
+}
+

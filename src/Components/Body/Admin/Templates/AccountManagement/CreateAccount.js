@@ -5,6 +5,8 @@ import $ from "jquery";
 import { AlertWarning } from "../../../../Alert/Warning";
 import { AlertOk } from "../../../../Alert/AlertOk";
 import { AlertError } from "../../../../Alert/Error";
+import CheckRefreshToken from "../../../../../Utils/CheckRefreshToken";
+import Swal from "sweetalert2";
 
 const CreateAccount = () => {
   const [listCountry, setListCountry] = useState([]);
@@ -82,6 +84,7 @@ const CreateAccount = () => {
 
   const GetTypeStaff = () => {
     let api = URL + "AccountManagement/staff-type";
+    CheckRefreshToken();
     fetch(api, {
       method: "GET",
       headers: {
@@ -136,6 +139,28 @@ const CreateAccount = () => {
   };
 
   const CreateAccount = () => {
+    let timerInterval;
+    Swal.fire({
+      title: "Đang thực hiện ...",
+      html: "Quá trình sẽ kết thúc sau <b></b> mili giây.",
+      timer: 2500,
+      timerProgressBar: true,
+      didOpen: () => {
+        Swal.showLoading();
+        const b = Swal.getHtmlContainer().querySelector("b");
+        timerInterval = setInterval(() => {
+          b.textContent = Swal.getTimerLeft();
+        }, 100);
+      },
+      willClose: () => {
+        clearInterval(timerInterval);
+      },
+    }).then((result) => {
+      /* Read more about handling dismissals below */
+      if (result.dismiss === Swal.DismissReason.timer) {
+        console.log("I was closed by the timer");
+      }
+    });
     var data = {};
     if (document.getElementById("is-staff").checked == true) {
       data = {
@@ -159,7 +184,7 @@ const CreateAccount = () => {
       };
     }
     console.log("🚀 ~ file: CreateAccount.js:140 ~ CreateAccount ~ data", data);
-
+    CheckRefreshToken();
     fetch(URL + "AccountManagement/account", {
       method: "POST", // or 'PUT'
       headers: {
@@ -172,11 +197,7 @@ const CreateAccount = () => {
       .then((results) => {
         console.log(results);
         if (results.code == 200) {
-          window.location.href =
-            window.location.href.slice(
-              0,
-              window.location.href.indexOf("localhost") + 14
-            ) + "/admin/account-management?Kw&Page=1";
+          window.location.href = "/admin/account-management?Kw&Page=1";
         } else {
           AlertWarning(results.message);
         }
@@ -210,10 +231,17 @@ const CreateAccount = () => {
 
   return (
     <>
-      <h1 style={{ textAlign: "center", marginBottom: "50px" }}>
+      <h1
+        style={{
+          textAlign: "center",
+          marginBottom: "50px",
+          fontFamily: "Dancing Script",
+          fontSize: "50px",
+        }}
+      >
         Tạo tài khoản
       </h1>
-      <form style={{ paddingLeft: "40%" }}>
+      <form style={{ paddingLeft: "40%" }} className="create-acc-form">
         <div style={{ marginBottom: "10px" }}>
           <label>
             Họ: <br />
@@ -290,7 +318,7 @@ const CreateAccount = () => {
             Chức vụ: <br />
             <select
               id="typeStaff"
-              style={{ width: "308px", height: "28px" }}
+              style={{ width: "323px", height: "45px", fontSize: "17px" }}
               onChange={() => GetTypeStaffId()}
             >
               {SetTypeStaff()}
@@ -331,7 +359,7 @@ const CreateAccount = () => {
                 aria-hidden="true"
                 onClick={() => updateAddress()}
               ></i>
-            </span>{" "}
+            </span>
             <br />
             <br />
             <div
@@ -346,7 +374,7 @@ const CreateAccount = () => {
                 <select
                   path="userCity"
                   id="city"
-                  style={{ width: "217px", height: "30px" }}
+                  style={{ width: "233px", height: "30px" }}
                   onClick={() => setDistricts()}
                 ></select>
               </div>
@@ -358,7 +386,7 @@ const CreateAccount = () => {
                   path="userDistrict"
                   id="district"
                   style={{
-                    width: "217px",
+                    width: "233px",
                     height: "30px",
                     marginTop: "5px",
                     marginBottom: "5px",
@@ -381,9 +409,9 @@ const CreateAccount = () => {
             </div>
           </label>
         </div>
-        <button id="button" type="button" onClick={() => CheckValue()}>
-          Tạo mới{" "}
-        </button>
+        <div class="middle" onClick={() => CheckValue()}>
+          <a class="btn btn1">Tạo mới</a>
+        </div>
       </form>
     </>
   );

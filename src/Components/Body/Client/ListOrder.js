@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
+import CheckRefreshToken from "../../../Utils/CheckRefreshToken";
 
 const ListOrder = () => {
   const [orders, setOrders] = useState([]);
@@ -23,6 +24,7 @@ const ListOrder = () => {
       "&Page=" +
       page +
       "&PageSize=15";
+    CheckRefreshToken();
     fetch(api, {
       method: "GET",
       headers: {
@@ -113,6 +115,7 @@ const ListOrder = () => {
       cancelButtonText: "Hủy",
     }).then((willDelete) => {
       if (willDelete.isConfirmed) {
+        CheckRefreshToken();
         fetch(URL + "Order/order/" + orderId, {
           method: "DELETE",
           headers: {
@@ -159,6 +162,7 @@ const ListOrder = () => {
 
   const Payment = (orderId, totalmoney, incurred) => {
     let api = URL + "Payment/payment-by-cash";
+    CheckRefreshToken();
     fetch(api, {
       method: "POST",
       headers: {
@@ -175,8 +179,8 @@ const ListOrder = () => {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
-        SendSMS();
         if (res.code == 200) {
+          SendSMS();
           Swal.fire({
             title: "Thanh toán hoàn tất",
             width: 600,
@@ -224,8 +228,8 @@ const ListOrder = () => {
     });
   };
 
+  var index = 0;
   const ReanderData = () => {
-    var index = 0;
     return orders.map((s) => {
       index++;
       return (
@@ -294,18 +298,30 @@ const ListOrder = () => {
 
   return (
     <>
-      <h1 style={{ textAlign: "center", marginBottom: "50px" }}>Hóa đơn</h1>
+      <h1
+        style={{
+          textAlign: "center",
+          marginBottom: "10px",
+          fontFamily: "Dancing Script",
+          fontSize: "50px",
+        }}
+      >
+        Hóa đơn
+      </h1>
 
       <div className="table-order-staff ">
         {" "}
-        <div style={{ marginLeft: "5%", marginBottom: "30px" }}>
-          <span style={{ fontSize: "18px", fontWeight: "600" }}>
-            Số điện thoại:{" "}
-          </span>
+        <div style={{ marginLeft: "0%", marginBottom: "30px" }}>
+          <span style={{ fontSize: "18px", fontWeight: "600" }}>Tìm kiếm:</span>
           <input
             id="search-by-phone-number"
             type="text"
-            style={{ width: "200px", height: "25px", marginLeft: "5px" }}
+            style={{
+              width: "200px",
+              height: "25px",
+              marginLeft: "5px",
+              paddingLeft: "10px",
+            }}
             onChange={() => GetData()}
           />
         </div>

@@ -28,7 +28,6 @@ const ConfirmCode = () => {
       cookie.indexOf("Email=") + 6,
       cookie.indexOf("end-email")
     );
-
     fetch("https://localhost:7109/api/Account/auth/confirm", {
       method: "POST", // or 'PUT'
       headers: {
@@ -40,11 +39,7 @@ const ConfirmCode = () => {
       .then((results) => {
         console.log(results);
         if (results.code == 200) {
-          window.location.href =
-            window.location.href.slice(
-              0,
-              window.location.href.indexOf("/auth")
-            ) + "/auth/sign-in";
+          window.location.href = "/auth/sign-in";
         } else {
           AlertError(results.message);
         }
@@ -98,85 +93,73 @@ const ConfirmCode = () => {
     var code = parseInt(code1 + code2 + code3 + code4 + code5 + code6);
     return code;
   };
+
+  const focusInput = (index) => {
+    if (document.getElementById("code" + index).value.length == 1)
+      document.getElementById("code" + (index + 1)).focus();
+  };
+
   return (
     <>
-      <h1 style={{ textAlign: "center", marginTop: "50px" }}>Xác nhận</h1>
+      <h1
+        style={{
+          textAlign: "center",
+          marginBottom: "10px",
+          fontFamily: "Dancing Script",
+          fontSize: "50px",
+          marginBottom: "50px",
+        }}
+      >
+        Xác nhận
+      </h1>
       <input
         id="code1"
         type="text"
         maxLength="1"
+        className="confirm-input"
         style={{
-          width: "40px",
-          height: "40px",
-          fontSize: "30px",
-          paddingLeft: "20px",
-          marginTop: "100px",
-          marginLeft: "39%",
+          marginLeft: "36.6%",
         }}
+        onChange={() => focusInput(1)}
       />
       <input
         id="code2"
         type="text"
         maxLength="1"
-        style={{
-          width: "40px",
-          height: "40px",
-          fontSize: "30px",
-          paddingLeft: "20px",
-          marginTop: "100px",
-        }}
+        className="confirm-input"
+        onChange={() => focusInput(2)}
       />
       <input
         id="code3"
         type="text"
         maxLength="1"
-        style={{
-          width: "40px",
-          height: "40px",
-          fontSize: "30px",
-          paddingLeft: "20px",
-          marginTop: "100px",
-        }}
+        className="confirm-input"
+        onChange={() => focusInput(3)}
       />
       <input
         id="code4"
         type="text"
         maxLength="1"
-        style={{
-          width: "40px",
-          height: "40px",
-          fontSize: "30px",
-          paddingLeft: "20px",
-          marginTop: "100px",
-        }}
+        className="confirm-input"
+        onChange={() => focusInput(4)}
       />
       <input
         id="code5"
         type="text"
         maxLength="1"
-        style={{
-          width: "40px",
-          height: "40px",
-          fontSize: "30px",
-          paddingLeft: "20px",
-          marginTop: "100px",
-        }}
+        className="confirm-input"
+        onChange={() => focusInput(5)}
       />
-      <input
-        id="code6"
-        type="text"
-        maxLength="1"
-        style={{
-          width: "40px",
-          height: "40px",
-          fontSize: "30px",
-          paddingLeft: "20px",
-          marginTop: "100px",
-        }}
-      />
+      <input id="code6" type="text" maxLength="1" className="confirm-input" />
       <input
         type="button"
-        style={{ marginLeft: "39%", color: "blue", marginTop: "30px" }}
+        style={{
+          marginLeft: "36.6%",
+          color: "blue",
+          marginTop: "30px",
+          height: "35px",
+          cursor: "pointer",
+        }}
         value="Gửi lại mã"
         onClick={SendCode}
       />
@@ -185,9 +168,11 @@ const ConfirmCode = () => {
         value="Gửi"
         style={{
           backgroundColor: "#1bc31b",
-          marginLeft: "258px",
+          marginLeft: "307px",
           width: "60px",
           height: " 35px",
+          borderColor: "green",
+          cursor: "pointer",
         }}
         onClick={CheckCode}
       />

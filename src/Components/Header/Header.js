@@ -19,15 +19,13 @@ const HeaderAdmin = () => {
     }).then((willDelete) => {
       if (willDelete.isConfirmed) {
         localStorage.removeItem("Token");
+        localStorage.removeItem("RefreshToken");
         localStorage.removeItem("Role");
         localStorage.removeItem("Name");
         localStorage.removeItem("Email");
         localStorage.removeItem("Avatar");
         localStorage.removeItem("Id");
-        window.location.href = window.location.href.slice(
-          0,
-          window.location.href.indexOf("localhost") + 14
-        );
+        window.location.href = "/";
       } else {
       }
     });
@@ -40,7 +38,7 @@ const HeaderAdmin = () => {
             <Nav.Link href="/" className="item-menu">
               Trang chủ
             </Nav.Link>
-            <Nav.Link href="/#list-rooms" className="item-menu">
+            <Nav.Link href="/#rooms" className="item-menu">
               Phòng
             </Nav.Link>
             <Nav.Link href="/service" className="item-menu">
@@ -88,24 +86,33 @@ const HeaderAdmin = () => {
                 <Nav.Link className="item-menu" onClick={LogOut}>
                   Đăng xuất
                 </Nav.Link>
-                <Nav.Link
-                  href="/profile"
-                  className="item-menu"
-                  style={{ width: "194px", float: "right", marginTop: "-19px" }}
-                >
-                  <span>{localStorage.getItem("Name").slice(0, 20)}</span>
-                  <img
+                <div style={{ marginTop: "-40px" }}>
+                  <Nav.Link
+                    href="/profile"
+                    className="item-menu"
                     style={{
-                      width: "30px",
-                      height: "18px",
-                      borderRadius: "50%",
-                      marginBottom: "-5px",
-                      marginLeft: "2px",
-                      border: "2px solid white",
+                      float: "right",
                     }}
-                    src={localStorage.getItem("Avatar")}
-                  />
-                </Nav.Link>
+                  >
+                    <span>{localStorage.getItem("Name").slice(0, 20)}</span>
+                    <img
+                      id="img-user-header"
+                      style={{
+                        width: "30px",
+                        height: "18px",
+                        borderRadius: "50%",
+                        marginBottom: "-5px",
+                        marginLeft: "2px",
+                        border: "2px solid white",
+                      }}
+                      src={
+                        localStorage.getItem("Avatar").length < 10
+                          ? "https://res.cloudinary.com/dykzla512/image/upload/v1672894851/HotelManagement/ng8l2mgr4xaykbzxwtby.jpg"
+                          : localStorage.getItem("Avatar")
+                      }
+                    />
+                  </Nav.Link>
+                </div>
               </>
             ) : (
               <>

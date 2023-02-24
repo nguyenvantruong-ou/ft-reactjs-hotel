@@ -7,11 +7,35 @@ import { AlertError } from "../../Alert/Error";
 import Swal from "sweetalert2";
 import "../css/General.css";
 import { render } from "@testing-library/react";
+import DataGrid, {
+  Column,
+  HeaderFilter,
+  LoadPanel,
+  ColumnHeaderFilter,
+  Paging,
+} from "devextreme-react/data-grid";
+import "devextreme/dist/css/dx.light.css";
+import CreateAccount from "../Admin/Templates/AccountManagement/CreateAccount";
+import CheckRefreshToken from "../../../Utils/CheckRefreshToken";
+import { Sankey } from "devextreme-react";
 
 const Order = () => {
   const [rooms, setRooms] = useState([]);
   const [services, setServices] = useState([]);
   const [accounts, setAccounts] = useState([]);
+
+  const setInputAccount = (id) => {
+    return (
+      <>
+        <input
+          id={"acc-order" + id.value}
+          className="radio-order-acc"
+          type="radio"
+          name="acc"
+        />
+      </>
+    );
+  };
 
   const GetDataRooms = (fMonth, fDay, fYear, tMonth, tDay, tYear, capId) => {
     let api =
@@ -31,6 +55,7 @@ const Order = () => {
       "&CapitaId=" +
       capId;
     console.log(api);
+    CheckRefreshToken();
     fetch(api, {
       method: "GET",
       headers: {
@@ -52,7 +77,6 @@ const Order = () => {
       .then((res) => res.json())
       .then((results) => {
         setServices(results.data);
-        console.log(results.data);
       })
       .catch((error) => console.log("error", error));
   };
@@ -62,6 +86,7 @@ const Order = () => {
       URL +
       "AccountManagement/accounts-active?Kw=" +
       document.getElementById("search-by-phone-number").value;
+    CheckRefreshToken();
     fetch(api, {
       method: "GET",
       headers: {
@@ -71,15 +96,16 @@ const Order = () => {
       .then((res) => res.json())
       .then((results) => {
         setAccounts(results.data);
-        console.log(results.data);
       })
       .catch((error) => console.log("error", error));
   };
 
   useEffect(() => {
+    GetAccount();
     GetDataRooms("01", "01", "2000", "01", "01", "2000", 1);
     GetDataServices();
-    GetAccount();
+
+    localStorage.setItem("UserIdOrder", 0);
   }, []);
 
   const format = (n) => {
@@ -182,7 +208,7 @@ const Order = () => {
   };
 
   const FinishOrder = () => {
-    var accID = GetUserID();
+    var accID = localStorage.getItem("UserIdOrder");
     console.log("🚀 ~ file: CreateOrder.js:186 ~ FinishOrder ~ userId", accID);
     let api = URL + "Order/order";
     let data = {
@@ -194,6 +220,7 @@ const Order = () => {
       ServiceId: GetListServiceId(),
     };
     console.log(data);
+    CheckRefreshToken();
     fetch(api, {
       method: "POST",
       headers: {
@@ -215,11 +242,7 @@ const Order = () => {
             confirmButtonText: "Đồng ý",
           }).then((willDelete) => {
             if (willDelete.isConfirmed) {
-              window.location.href =
-                window.location.href.slice(
-                  0,
-                  window.location.href.indexOf("localhost") + 14
-                ) + "/list-order";
+              window.location.href = "/list-order";
             } else {
             }
           });
@@ -234,19 +257,117 @@ const Order = () => {
   const GetUserID = () => {
     var listCheckbox = document.getElementsByClassName("radio-order-acc");
     for (var i = 0; i < listCheckbox.length; i++) {
-      if (listCheckbox[i].checked == true)
-        return listCheckbox[i].id.slice(
-          listCheckbox[i].id.length - 1,
-          listCheckbox[i].id.length
+      if (listCheckbox[i].checked == true) {
+        return parseInt(
+          listCheckbox[i].id.slice(
+            listCheckbox[i].id.indexOf("order") + 5,
+            listCheckbox[i].id.length
+          )
         );
+      }
     }
     return null;
   };
 
-  const GetTotalMoney = () => {
-    var userId = GetUserID();
+  var CheckUserId = () => {
+    if (
+      document.getElementById("chck-account").checked == false &&
+      localStorage.getItem("UserIdOrder") == 0
+    ) {
+      var lastName = document.getElementById("acc-lastname").value;
+      var firstName = document.getElementById("acc-firstname").value;
+      var email = document.getElementById("acc-email").value;
+      var cardId = document.getElementById("acc-card-id").value;
+      var phoneNumber = document.getElementById("acc-phone-number").value;
+      var address = document.getElementById("acc-address").value;
 
-    if (userId == null) {
+      document.getElementById("acc-lastname").style.border = "1px solid black";
+      document.getElementById("acc-firstname").style.border = "1px solid black";
+      document.getElementById("acc-email").style.border = "1px solid black";
+      document.getElementById("acc-card-id").style.border = "1px solid black";
+      document.getElementById("acc-phone-number").style.border =
+        "1px solid black";
+      document.getElementById("acc-address").style.border = "1px solid black";
+
+      var flag = 1;
+      if (lastName.length < 1) {
+        flag = 0;
+        document.getElementById("acc-lastname").style.border = "1px solid red";
+      }
+
+      if (firstName.length < 1) {
+        flag = 0;
+        document.getElementById("acc-firstname").style.border = "1px solid red";
+      }
+
+      if (email.length < 5) {
+        document.getElementById("acc-email").style.border = "1px solid red";
+        flag = 0;
+      }
+
+      if (cardId.length < 9 || cardId.length > 12) {
+        document.getElementById("acc-card-id").style.border = "1px solid red";
+        flag = 0;
+      }
+
+      if (phoneNumber.length != 10) {
+        document.getElementById("acc-phone-number").style.border =
+          "1px solid red";
+        flag = 0;
+      }
+
+      if (address.length < 1) {
+        document.getElementById("acc-address").style.border = "1px solid red";
+        flag = 0;
+      }
+
+      if (flag == 0) {
+        AlertError("Vui lòng kiểm tra lại thông tin khách hàng!");
+        return;
+      }
+      // create acc and get userId
+      var data = {
+        Email: email,
+        FirstName: firstName,
+        LastName: lastName,
+        CardId: cardId,
+        PhoneNumber: phoneNumber,
+        Address: address,
+      };
+      CheckRefreshToken();
+      fetch(URL + "AccountManagement/account", {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("Token"),
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((results) => {
+          console.log(results);
+          if (results.code == 200) {
+            console.log(results.data);
+            localStorage.setItem("UserIdOrder", results.data);
+          } else {
+            AlertWarning(results.message);
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          AlertWarning(error.message);
+        });
+    } else {
+      if (document.getElementById("chck-account").checked == true)
+        localStorage.setItem("UserIdOrder", GetUserID());
+    }
+
+    if (localStorage.getItem("UserIdOrder") > 0) GetTotalMoney();
+    else AlertWarning("Vui lòng kiểm tra lại thông tin khách hàng!");
+  };
+
+  const GetTotalMoney = () => {
+    if (localStorage.getItem("UserIdOrder") == 0) {
       Swal.fire({
         icon: "error",
         title: "Vui lòng chọn khách hàng",
@@ -262,6 +383,7 @@ const Order = () => {
         ServiceId: GetListServiceId(),
       };
       console.log(data);
+      CheckRefreshToken();
       fetch(api, {
         method: "POST",
         headers: {
@@ -344,21 +466,79 @@ const Order = () => {
     });
   };
 
+  const changeFormAccount = () => {
+    var flag = document.getElementById("chck-account").checked;
+    if (flag == true) {
+      document.getElementById("enter-information-acc").style.display = "none";
+      document.getElementById("existing-account").style.display = "block";
+    } else {
+      document.getElementById("existing-account").style.display = "none";
+      document.getElementById("enter-information-acc").style.display = "block";
+      // localStorage.setItem("UserIdOrder", 0);
+    }
+  };
+
   return (
     <>
-      <h1 style={{ textAlign: "center", marginBottom: "50px" }}>Đặt phòng</h1>{" "}
-      <div className="main-order" style={{ height: "1035px !important" }}>
-        <div className="list-acc-create-order">
-          <div style={{ marginLeft: "5%", marginBottom: "30px" }}>
-            <span style={{ fontSize: "18px", fontWeight: "600" }}>Email: </span>
-            <input
-              id="search-by-phone-number"
-              type="text"
-              style={{ width: "200px", height: "25px", marginLeft: "5px" }}
-              onChange={() => GetAccount()}
-            />
-          </div>
-          <table className="table-room">
+      <h1
+        style={{
+          textAlign: "center",
+          marginBottom: "10px",
+          fontFamily: "Dancing Script",
+          fontSize: "50px",
+          marginBottom: "50px",
+        }}
+      >
+        Đặt phòng
+      </h1>
+      {localStorage.getItem("Role") == "STAFF" ||
+      localStorage.getItem("Role") == "ADMIN" ? (
+        <>
+          <div className="main-order" style={{ height: "1035px !important" }}>
+            <div
+              style={{
+                display: "flex",
+                marginBottom: "30px",
+                marginLeft: "auto",
+              }}
+            >
+              <div>Khách đã có tài khoản ?</div>
+              <div style={{ marginLeft: "20px" }}>
+                <input
+                  id="chck-account"
+                  type="checkbox"
+                  onChange={() => changeFormAccount()}
+                />
+                <label for="chck-account" class="check-trail">
+                  <span class="check-handler"></span>
+                </label>
+              </div>
+            </div>
+            <div
+              id="existing-account"
+              style={{ userSelect: "none", display: "none" }}
+            >
+              <div style={{ marginLeft: "0%", marginBottom: "30px" }}>
+                <span style={{ fontSize: "18px", fontWeight: "600" }}>
+                  Email:{" "}
+                </span>
+                <input
+                  id="search-by-phone-number"
+                  type="text"
+                  style={{
+                    width: "200px",
+                    height: "25px",
+                    marginLeft: "5px",
+                    borderRadius: "20px",
+                    paddingLeft: "15px",
+                    fontSize: "17px",
+                  }}
+                  placeholder="Tìm kiếm ..."
+                  onChange={() => GetAccount()}
+                />
+              </div>
+              <div className="list-acc-create-order">
+                {/* <table className="table-room">
             <thead>
               <tr>
                 <th></th>
@@ -371,52 +551,122 @@ const Order = () => {
               </tr>
             </thead>
             <tbody>{RenderAccount()}</tbody>
-          </table>
-        </div>
-        <br />
-        <hr />
-        <div className="select-order">
-          <span>Từ: </span>
-          <input
-            id="from-date"
-            type="date"
-            onChange={() => {
-              GetListRoom();
-            }}
-          />
-          <span style={{ marginLeft: "120px" }}>Đến: </span>
-          <input
-            id="end-date"
-            type="date"
-            onChange={() => {
-              GetListRoom();
-            }}
-          />
-          <span style={{ marginLeft: "120px" }}>Số người(> 10 tuổi): </span>
-          <select
-            id="capitaId"
-            onChange={() => {
-              GetListRoom();
-            }}
-          >
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-          </select>
-        </div>
-        <div className="main-order-select">
-          <div className="list-room-order">{RenderRooms()}</div>
-          <div className="list-service-order">{RenderServices()}</div>
-        </div>
-        <input
-          type="button"
-          value="Đặt phòng"
-          className="btn-order"
-          onClick={() => GetTotalMoney()}
-        />
-      </div>
+          </table> */}
+                <DataGrid dataSource={accounts} paging={{ pageSize: 5 }}>
+                  <LoadPanel enabled />
+                  <HeaderFilter
+                    allowSearch={true}
+                    visible={true}
+                    style={{ backgroundColor: "red" }}
+                  />
+                  <Column
+                    dataField="id"
+                    caption=""
+                    width="50"
+                    cellRender={setInputAccount}
+                  />
+                  <Column dataField="lastName" caption="Họ" width="100" />
+                  <Column dataField="firstName" caption="Tên" width="100" />
+                  <Column dataField="email" caption="Email" width="200" />
+                  <Column
+                    dataField="phoneNumber"
+                    caption="Số điện thoại"
+                    width="120"
+                  />
+                  <Column dataField="cardId" caption="CMND/CCCD" width="120" />
+                  <Column dataField="gender" caption="Giới tính" width="100" />
+                  <Column dataField="address" caption="Địa chỉ" width="360" />
+                </DataGrid>
+              </div>
+            </div>
+            <div id="enter-information-acc" style={{ userSelect: "none" }}>
+              <h4>Điền thông tin khách hàng:</h4>
+              <div className="form-info-of-customer">
+                <div>
+                  <div>
+                    <input
+                      id="acc-lastname"
+                      type="text"
+                      placeholder="Họ và tên đệm"
+                    />
+                  </div>
+                  <div>
+                    <input id="acc-firstname" type="text" placeholder="Tên" />
+                  </div>
+                  <div>
+                    <input id="acc-email" type="email" placeholder="Email" />
+                  </div>
+                </div>
+                <div>
+                  <div>
+                    <input
+                      id="acc-card-id"
+                      type="text"
+                      placeholder="CMND/CCCD"
+                    />
+                  </div>
+                  <div>
+                    <input
+                      id="acc-phone-number"
+                      type="text"
+                      placeholder="Số điện thoại"
+                    />
+                  </div>
+                  <div>
+                    <input id="acc-address" type="text" placeholder="Địa chỉ" />
+                  </div>
+                  <div></div>
+                </div>
+              </div>
+            </div>
+            <br />
+            <hr />
+            <div className="select-order">
+              <span>Từ: </span>
+              <input
+                id="from-date"
+                type="date"
+                onChange={() => {
+                  GetListRoom();
+                }}
+              />
+              <span style={{ marginLeft: "120px" }}>Đến: </span>
+              <input
+                id="end-date"
+                type="date"
+                onChange={() => {
+                  GetListRoom();
+                }}
+              />
+              <span style={{ marginLeft: "120px" }}>Số người(> 10 tuổi): </span>
+              <select
+                id="capitaId"
+                onChange={() => {
+                  GetListRoom();
+                }}
+              >
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+              </select>
+            </div>
+            <div className="main-order-select">
+              <div className="list-room-order">{RenderRooms()}</div>
+              <div className="list-service-order">{RenderServices()}</div>
+            </div>
+            <input
+              type="button"
+              value="Đặt phòng"
+              className="btn-order"
+              onClick={() => CheckUserId()}
+            />
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
     </>
   );
 };

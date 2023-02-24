@@ -4,6 +4,7 @@ import "../../Templates/StyleAdmin.css";
 import { Link } from "react-router-dom";
 import { AlertWarning } from "../../../../Alert/Warning";
 import { AlertOk } from "../../../../Alert/AlertOk";
+import CheckRefreshToken from "../../../../../Utils/CheckRefreshToken";
 
 export default class RoomManagement extends React.Component {
   constructor(props) {
@@ -29,6 +30,7 @@ export default class RoomManagement extends React.Component {
       this.getSort() +
       "&Page=1&PageSize=1000";
     console.log(api);
+    CheckRefreshToken();
     fetch(api, {
       method: "GET",
       headers: {
@@ -37,6 +39,7 @@ export default class RoomManagement extends React.Component {
     })
       .then((res) => res.json())
       .then((results) => {
+        console.log(results.data);
         this.setState({
           response: results.data,
         });
@@ -49,6 +52,7 @@ export default class RoomManagement extends React.Component {
   }
 
   deleteRoom(id) {
+    CheckRefreshToken();
     fetch(URL + "RoomManagement/room/" + id, {
       method: "DELETE",
       headers: {
@@ -117,7 +121,14 @@ export default class RoomManagement extends React.Component {
   render() {
     return (
       <>
-        <h1 style={{ textAlign: "center", marginBottom: "30px" }}>
+        <h1
+          style={{
+            textAlign: "center",
+            marginBottom: "20px",
+            fontFamily: "Dancing Script",
+            fontSize: "50px",
+          }}
+        >
           Quản lý phòng
         </h1>
         <div className="search-room">

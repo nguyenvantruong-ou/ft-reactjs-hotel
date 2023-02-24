@@ -8,6 +8,9 @@ import { AlertWarning } from "../../Alert/Warning";
 import { AlertError } from "../../Alert/Error";
 import { AlertOk } from "../../Alert/AlertOk";
 import { useLoaderData } from "react-router-dom";
+import CheckRefreshToken from "../../../Utils/CheckRefreshToken";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 let listCountry = {};
 $("set-address").ready(function () {
@@ -90,8 +93,10 @@ export default class Profile extends React.Component {
       response: [],
     };
   }
-  componentDidMount() {
+  async componentDidMount() {
     let api = URL + "AccountManagement/account/" + localStorage.getItem("Id");
+    // check expiration of token
+    CheckRefreshToken();
     fetch(api, {
       method: "GET",
       headers: {
@@ -100,13 +105,21 @@ export default class Profile extends React.Component {
     })
       .then((res) => res.json())
       .then((results) => {
+        console.log(
+          "🚀 ~ file: Profile.js:106 ~ Profile ~ .then ~ results",
+          results
+        );
+        // alert("KKKKK");
         this.setState({
           response: results.data,
         });
         //
+        document.getElementById("img-user-header").src = results.data.avatar;
         localStorage.setItem("Avatar", results.data.avatar);
       })
-      .catch((error) => console.log("error", error));
+      .catch((error) => {
+        console.log("error", error);
+      });
   }
 
   checkrole(role) {
@@ -197,6 +210,28 @@ export default class Profile extends React.Component {
     )
       AlertWarning("Vui lòng nhập địa chỉ!");
     else {
+      let timerInterval;
+      Swal.fire({
+        title: "Đang thực hiện ...",
+        html: "Quá trình sẽ kết thúc sau <b></b> mili giây.",
+        timer: 2500,
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+          const b = Swal.getHtmlContainer().querySelector("b");
+          timerInterval = setInterval(() => {
+            b.textContent = Swal.getTimerLeft();
+          }, 100);
+        },
+        willClose: () => {
+          clearInterval(timerInterval);
+        },
+      }).then((result) => {
+        /* Read more about handling dismissals below */
+        if (result.dismiss === Swal.DismissReason.timer) {
+          console.log("I was closed by the timer");
+        }
+      });
       var File =
         document.getElementById("avatar").files[0] == null
           ? null
@@ -215,6 +250,7 @@ export default class Profile extends React.Component {
       console.log([...formData]);
 
       try {
+        CheckRefreshToken();
         axios
           .put(URL + "AccountManagement/profile", formData, {
             headers: {
@@ -260,19 +296,25 @@ export default class Profile extends React.Component {
     var result = this.state.response;
     return (
       <>
-        <div className="img-avatar">
+        <div
+          className="img-avatar"
+          data-aos="flip-left"
+          data-aos-easing="ease-out-cubic"
+          data-aos-duration="2000"
+        >
           <img id="profile-avatar-image" src={result.avatar}></img>
         </div>
         <input
           id="avatar"
           type="file"
+          accept="image/jpeg,image/png,image/gif"
           style={{ marginLeft: "40%" }}
           onClick={this.showButtonUpdate}
           onChange={() => this.UpdateAvatar()}
         />
         <br />
         <br />
-        <h2 className="name-profile">
+        <h2 className="name-profile" data-aos="zoom-in">
           {result.lastName +
             " " +
             result.firstName +
@@ -282,7 +324,7 @@ export default class Profile extends React.Component {
         </h2>
         <br />
 
-        <ul id="profile-ul">
+        <ul id="profile-ul" data-aos="flip-down">
           <li>
             Email:{" "}
             <input
@@ -406,7 +448,12 @@ export default class Profile extends React.Component {
         <div className="main-profile" id="profile-par">
           {this.renderData()}
 
-          <a className="change-pw-profile" href="/change-password">
+          <a
+            className="change-pw-profile"
+            href="/change-password"
+            data-aos="fade-up"
+            data-aos-duration="3000"
+          >
             Đổi mật khẩu
           </a>
           <button

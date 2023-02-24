@@ -6,6 +6,9 @@ import { AlertOk } from "../../Alert/AlertOk";
 import { AlertError } from "../../Alert/Error";
 import Swal from "sweetalert2";
 import "../css/General.css";
+import CheckRefreshToken from "../../../Utils/CheckRefreshToken";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const Order = () => {
   const [rooms, setRooms] = useState([]);
@@ -28,7 +31,7 @@ const Order = () => {
       tYear +
       "&CapitaId=" +
       capId;
-    console.log(api);
+    CheckRefreshToken();
     fetch(api, {
       method: "GET",
       headers: {
@@ -58,6 +61,11 @@ const Order = () => {
   useEffect(() => {
     GetDataRooms("01", "01", "2000", "01", "01", "2000", 1);
     GetDataServices();
+    AOS.init({
+      duration: 500,
+      easing: "ease-out",
+      delay: 100,
+    });
   }, []);
 
   const format = (n) => {
@@ -169,7 +177,7 @@ const Order = () => {
       RoomId: GetListRoomId(),
       ServiceId: GetListServiceId(),
     };
-    console.log(data);
+    CheckRefreshToken();
     fetch(api, {
       method: "POST",
       headers: {
@@ -191,11 +199,7 @@ const Order = () => {
             confirmButtonText: "Đồng ý",
           }).then((willDelete) => {
             if (willDelete.isConfirmed) {
-              window.location.href =
-                window.location.href.slice(
-                  0,
-                  window.location.href.indexOf("localhost") + 14
-                ) + "/history";
+              window.location.href = "/history";
             } else {
             }
           });
@@ -217,6 +221,7 @@ const Order = () => {
       ServiceId: GetListServiceId(),
     };
     console.log(data);
+    CheckRefreshToken();
     fetch(api, {
       method: "POST",
       headers: {
@@ -270,8 +275,18 @@ const Order = () => {
 
   return (
     <>
-      <h1 style={{ textAlign: "center", marginBottom: "50px" }}>Đặt phòng</h1>
-      <div className="main-order">
+      <h1
+        style={{
+          textAlign: "center",
+          marginBottom: "10px",
+          fontFamily: "Dancing Script",
+          fontSize: "50px",
+        }}
+        data-aos="zoom-in"
+      >
+        Đặt phòng
+      </h1>
+      <div className="main-order" data-aos="zoom-out">
         <div className="select-order">
           <span>Từ: </span>
           <input

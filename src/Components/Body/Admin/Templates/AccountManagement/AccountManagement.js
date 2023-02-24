@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { URL } from "../../../../../Utils/Url";
 import { AlertWarning } from "../../../../Alert/Warning";
 import { AlertOk } from "../../../../Alert/AlertOk";
+import CheckRefreshToken from "../../../../../Utils/CheckRefreshToken";
 
 const AccountManagement = () => {
   const [account, setAccount] = useState([]);
@@ -21,6 +22,7 @@ const AccountManagement = () => {
       "🚀 ~ file: AccountManagement.js:18 ~ useEffect ~ setKw",
       kw == "" ? "null" : "k"
     );
+    CheckRefreshToken();
     fetch(api, {
       method: "GET",
       headers: {
@@ -78,6 +80,7 @@ const AccountManagement = () => {
   };
 
   const DeleteAccount = (accountId) => {
+    CheckRefreshToken();
     fetch(URL + "AccountManagement/account/" + accountId, {
       method: "DELETE",
       headers: {
@@ -98,63 +101,96 @@ const AccountManagement = () => {
   };
 
   const renderData = () => {
-    return account.map((s) => {
+    if (account.length == 0)
       return (
-        <tr>
-          <td>{s.email}</td>
-          <td>{s.lastName + " " + s.firstName}</td>
-          <td>
-            {s.role == "ADMIN"
-              ? "Quản trị viên"
-              : s.role == "STAFF"
-              ? "Nhân Viên"
-              : "Người dùng"}
-          </td>
-          <td>{s.gender}</td>
-          <td>{s.cardId}</td>
-          <td>{s.phoneNumber}</td>
-          <td>{s.address != null ? s.address.slice(0, 20) + "..." : ""}</td>
-          <td>
-            <input type="checkbox" checked={s.status} />
-          </td>
-          <td>{s.dateCreated.slice(0, 10)}</td>
-          <td>
-            {s.role == "ADMIN" ? (
-              <button disabled>
-                <a>Sửa</a>
-              </button>
-            ) : (
-              <button className="update-btn-room">
-                <a href={"account-management/" + s.id + "/" + s.cardId.trim()}>
-                  Sửa
-                </a>
-              </button>
-            )}
-          </td>
-          <td>
-            {s.role == "ADMIN" ? (
-              <button disabled>Xóa</button>
-            ) : s.status == true ? (
-              <button
-                className="delete-btn-room"
-                onClick={() => DeleteAccount(s.id)}
-              >
-                Xóa
-              </button>
-            ) : (
-              <button disabled style={{ color: "white" }}>
-                Xóa
-              </button>
-            )}
-          </td>
-        </tr>
+        <>
+          <div
+            style={{
+              textAlign: "center",
+              fontStyle: "italic",
+              fontSize: "17px",
+              width: "685%",
+              paddingTop: "50px",
+              paddingBottom: "50px",
+            }}
+          >
+            danh sách rỗng!!!
+          </div>
+        </>
       );
-    });
+    else
+      return account.map((s) => {
+        return (
+          <tr>
+            <td>{s.email}</td>
+            <td>{s.lastName + " " + s.firstName}</td>
+            <td>
+              {s.role == "ADMIN"
+                ? "Quản trị viên"
+                : s.role == "STAFF"
+                ? "Nhân viên"
+                : "Người dùng"}
+            </td>
+            <td>{s.gender}</td>
+            <td>{s.cardId}</td>
+            <td>{s.phoneNumber}</td>
+            <td title={s.address}>
+              {s.address != null ? s.address.slice(0, 12) + "..." : ""}
+            </td>
+            <td>
+              <input
+                // style={{ marginLeft: "35px" }}
+                type="checkbox"
+                checked={s.status}
+              />
+            </td>
+            <td>{s.dateCreated.slice(0, 10)}</td>
+            <td>
+              {s.role == "ADMIN" ? (
+                <button disabled>
+                  <a>Sửa</a>
+                </button>
+              ) : (
+                <button className="update-btn-room">
+                  <a
+                    href={"account-management/" + s.id + "/" + s.cardId.trim()}
+                  >
+                    Sửa
+                  </a>
+                </button>
+              )}
+            </td>
+            <td>
+              {s.role == "ADMIN" ? (
+                <button disabled>Xóa</button>
+              ) : s.status == true ? (
+                <button
+                  className="delete-btn-room"
+                  onClick={() => DeleteAccount(s.id)}
+                >
+                  Xóa
+                </button>
+              ) : (
+                <button disabled style={{ color: "white" }}>
+                  Xóa
+                </button>
+              )}
+            </td>
+          </tr>
+        );
+      });
   };
 
   return (
     <>
-      <h1 style={{ textAlign: "center", marginBottom: "50px" }}>
+      <h1
+        style={{
+          textAlign: "center",
+          marginBottom: "50px",
+          fontFamily: "Dancing Script",
+          fontSize: "50px",
+        }}
+      >
         Quản lý tài khoản
       </h1>
       <div className="search-room">
@@ -162,13 +198,13 @@ const AccountManagement = () => {
         <input id="kw-acc-management" type="text" onChange={() => SetKw()} />
 
         <a href="/admin/account-management/create">
-          Thêm nhân viên <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+          Thêm tài khoản <i class="fa fa-plus-square-o" aria-hidden="true"></i>
         </a>
       </div>
       <div className="main-room">
         <table className="table-room" style={{ marginBottom: "-100px " }}>
           <thead>
-            <tr>
+            <tr style={{ cursor: "pointer" }}>
               <th>Email</th>
               <th>Họ và tên</th>
               <th>Quyền</th>

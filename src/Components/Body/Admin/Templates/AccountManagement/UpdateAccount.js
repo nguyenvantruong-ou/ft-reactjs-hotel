@@ -5,6 +5,7 @@ import $ from "jquery";
 import { AlertWarning } from "../../../../Alert/Warning";
 import { AlertOk } from "../../../../Alert/AlertOk";
 import { AlertError } from "../../../../Alert/Error";
+import CheckRefreshToken from "../../../../../Utils/CheckRefreshToken";
 
 const UpdateAccount = () => {
   const [listCountry, setListCountry] = useState([]);
@@ -100,6 +101,7 @@ const UpdateAccount = () => {
 
   const GetDataAccount = () => {
     let api = URL + "AccountManagement/account/" + id;
+    CheckRefreshToken();
     fetch(api, {
       method: "GET",
       headers: {
@@ -159,6 +161,7 @@ const UpdateAccount = () => {
       };
     }
     console.log(data);
+    CheckRefreshToken();
     fetch(api, {
       method: "PUT",
       headers: {
@@ -211,6 +214,7 @@ const UpdateAccount = () => {
 
   const GetTypeStaff = () => {
     let api = URL + "AccountManagement/staff-type";
+    CheckRefreshToken();
     fetch(api, {
       method: "GET",
       headers: {
@@ -249,7 +253,14 @@ const UpdateAccount = () => {
 
   return (
     <>
-      <h1 style={{ textAlign: "center", marginBottom: "50px" }}>
+      <h1
+        style={{
+          textAlign: "center",
+          marginBottom: "50px",
+          fontFamily: "Dancing Script",
+          fontSize: "50px",
+        }}
+      >
         Cập nhật thông tin tài khoản
       </h1>
       <form style={{ paddingLeft: "40%" }}>

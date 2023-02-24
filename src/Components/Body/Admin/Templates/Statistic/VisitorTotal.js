@@ -4,6 +4,7 @@ import { AlertWarning } from "../../../../Alert/Warning";
 import { AlertOk } from "../../../../Alert/AlertOk";
 import { AlertError } from "../../../../Alert/Error";
 import { CanvasJSChart } from "canvasjs-react-charts";
+import CheckRefreshToken from "../../../../../Utils/CheckRefreshToken";
 
 const VisitorTotal = () => {
   const [amount, setAmount] = useState([
@@ -14,6 +15,7 @@ const VisitorTotal = () => {
 
   const getData = () => {
     let api = URL + "Statistics/amount-customer";
+    CheckRefreshToken();
     fetch(api, {
       method: "GET",
       headers: {
@@ -62,7 +64,14 @@ const VisitorTotal = () => {
   return (
     <div style={{ width: "80%", marginLeft: "10%", marginBottom: "100px" }}>
       <div>
-        <h1 style={{ textAlign: "center", marginBottom: "50px" }}>
+        <h1
+          style={{
+            textAlign: "center",
+            marginBottom: "50px",
+            fontFamily: "Dancing Script",
+            fontSize: "50px",
+          }}
+        >
           Khách hàng
         </h1>
         <CanvasJSChart options={options2} />

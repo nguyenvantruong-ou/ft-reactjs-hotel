@@ -1,17 +1,44 @@
 import React, { useEffect, useState } from "react";
-import { useLoaderData, useParams } from "react-router-dom";
+import { useLoaderData, useParams, useSearchParams } from "react-router-dom";
 import { URL } from "../../../Utils/Url";
 import { AlertWarning } from "../../Alert/Warning";
 import { AlertOk } from "../../Alert/AlertOk";
 import { AlertError } from "../../Alert/Error";
 import Swal from "sweetalert2";
 import "../css/General.css";
+import CheckRefreshToken from "../../../Utils/CheckRefreshToken";
+
+// paypal
+import axios from "axios";
+const clientId =
+  "AQ-2GZEt7QTO8Udw2-dupOowuXzz-vRhBhroeC1oOQYZV70EuJwDSm8oR0GpIbEg-sF9VPfquOFgcfKa";
+const secret =
+  "EF4EsEvpmr3leQ_yGw8kVU4XyXnl6T9slSYJTrTicTQCj5Pg43oWITS1y29jhrrDmj5U5ogV3Zl2NX7T";
+const auth = btoa(`${clientId}:${secret}`);
 
 const History = () => {
   const [data, setData] = useState([]);
+  const [currentUrl, setCurrentUrl] = useState(window.location.href);
+  const [params] = useSearchParams();
+
+  var toastMixin = Swal.mixin({
+    toast: true,
+    icon: "success",
+    title: "General Title",
+    animation: false,
+    position: "top-right",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
 
   const GetData = () => {
     let api = URL + "History/history/" + localStorage.getItem("Id");
+    CheckRefreshToken();
     fetch(api, {
       method: "GET",
       headers: {
@@ -23,11 +50,21 @@ const History = () => {
         setData(results.data);
         console.log(results.data);
       })
-      .catch((error) => console.log("error", error));
+      .catch((error) => console.log(error));
   };
 
   useEffect(() => {
     GetData();
+    if (params.get("result") == "error")
+      toastMixin.fire({
+        title: "Thanh toán thất bại",
+        icon: "error",
+      });
+    else if (params.get("result") == "success")
+      toastMixin.fire({
+        animation: true,
+        title: "Thanh toán thành công",
+      });
   }, []);
 
   const format = (n) => {
@@ -48,6 +85,7 @@ const History = () => {
       cancelButtonText: "Hủy",
     }).then((willDelete) => {
       if (willDelete.isConfirmed) {
+        CheckRefreshToken();
         fetch(URL + "Order/order/" + orderId, {
           method: "DELETE",
           headers: {
@@ -70,7 +108,100 @@ const History = () => {
     });
   };
 
-  const Payment = (total) => {
+  const Payment = (orderId, total) => {
+    Swal.fire({
+      title: "Thanh toán",
+      icon: "question",
+      html:
+        '<img id="paypal-payment" style="width: 120px; height: 80px; cursor: pointer; margin-right: 40px" src="https://quyetdao.com/wp-content/uploads/2019/04/paypal-logo.png"/> ' +
+        '<img id="momo-payment" style="width: 120px; height: 80px; cursor: pointer;" src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png"/>',
+      showCancelButton: true,
+      showConfirmButton: false,
+      dangerMode: true,
+      cancelButtonText: "Hủy",
+    });
+    const momo = document.getElementById("momo-payment");
+    momo.addEventListener("click", () => {
+      PaymentMoMo(total);
+    });
+
+    const paypal = document.getElementById("paypal-payment");
+    paypal.addEventListener("click", async () => {
+      // alert(await getTokenPaypal());
+      PaymentPaypal(await getTokenPaypal(), orderId, total);
+    });
+  };
+
+  const PaymentPaypal = (token, orderId, totalMoney) => {
+    console.log("token: " + token);
+    fetch("https://api-m.sandbox.paypal.com/v1/payments/payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify({
+        intent: "sale",
+        payer: {
+          payment_method: "paypal",
+        },
+        transactions: [
+          {
+            amount: {
+              total: totalMoney,
+              currency: "USD",
+            },
+            description: "This is the payment description.",
+          },
+        ],
+        redirect_urls: {
+          return_url:
+            currentUrl.slice(0, currentUrl.lastIndexOf("history")) +
+            "payment/handling/" +
+            orderId +
+            "/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW/" +
+            totalMoney,
+          cancel_url: currentUrl,
+        },
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle response data
+        console.log(data);
+        // window.open(data.links[1].href, "_blank");
+        window.location.href = data.links[1].href;
+      })
+      .catch((error) => {
+        // Handle error
+      });
+  };
+
+  const getTokenPaypal = async () => {
+    var result = "";
+    await axios
+      .post(
+        "https://api.sandbox.paypal.com/v1/oauth2/token",
+        "grant_type=client_credentials",
+        {
+          headers: {
+            Authorization: `Basic ${auth}`,
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      )
+      .then((response) => {
+        const token = response.data.access_token;
+        console.log("GetToken: " + token);
+        result = token;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    return result;
+  };
+
+  const PaymentMoMo = (total) => {
     let api = "http://localhost:2023/payment-momo";
     fetch(api, {
       method: "POST",
@@ -89,6 +220,21 @@ const History = () => {
       });
   };
 
+  const SendSMS = () => {
+    fetch(URL + "Payment/payment-successful", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ PhoneNumber: "+84356371760" }),
+    })
+      .then((res) => res.json())
+      .then((res) => {})
+      .catch((error) => {
+        AlertError(error.message);
+        console.log("error", error);
+      });
+  };
   const Renderdata = () => {
     if (data.length == 0)
       return (
@@ -194,7 +340,7 @@ const History = () => {
                             type="button"
                             value="Thanh toán"
                             className="btn-payment-order"
-                            onClick={() => Payment(s.totalMoney)}
+                            onClick={() => Payment(s.id, s.totalMoney)}
                           />
                         </>
                       )}
@@ -314,7 +460,16 @@ const History = () => {
   };
   return (
     <>
-      <h1 style={{ textAlign: "center", marginBottom: "50px" }}>Lịch sử</h1>
+      <h1
+        style={{
+          textAlign: "center",
+          marginBottom: "10px",
+          fontFamily: "Dancing Script",
+          fontSize: "50px",
+        }}
+      >
+        Lịch sử
+      </h1>
       <div className="main-history">{Renderdata()}</div>
     </>
   );

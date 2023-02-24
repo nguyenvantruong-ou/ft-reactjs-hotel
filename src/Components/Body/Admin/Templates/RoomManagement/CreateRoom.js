@@ -3,6 +3,8 @@ import { URL } from "../../../../../Utils/Url";
 import axios from "axios";
 import { AlertError } from "../../../../Alert/Error";
 import { AlertWarning } from "../../../../Alert/Warning";
+import CheckRefreshToken from "../../../../../Utils/CheckRefreshToken";
+import Swal from "sweetalert2";
 
 const CreateRoom = () => {
   const SetImages = () => {
@@ -24,6 +26,30 @@ const CreateRoom = () => {
   };
 
   const Create = () => {
+    let timerInterval;
+    Swal.fire({
+      title: "Đang thực hiện ...",
+      html: "Quá trình sẽ kết thúc sau <b></b> mili giây.",
+      timer: 5500,
+      timerProgressBar: true,
+      didOpen: () => {
+        Swal.showLoading();
+        const b = Swal.getHtmlContainer().querySelector("b");
+        timerInterval = setInterval(() => {
+          b.textContent = Swal.getTimerLeft();
+        }, 100);
+      },
+      willClose: () => {
+        clearInterval(timerInterval);
+      },
+    }).then((result) => {
+      /* Read more about handling dismissals below */
+      if (result.dismiss === Swal.DismissReason.timer) {
+        console.log("I was closed by the timer");
+      }
+    });
+
+    // create a new room
     var Files = document.getElementById("images").files;
     const formData = new FormData();
     formData.append("RoomName", document.getElementById("roomName").value);
@@ -43,6 +69,7 @@ const CreateRoom = () => {
     console.log([...formData]);
 
     try {
+      CheckRefreshToken();
       axios
         .post(URL + "RoomManagement/room", formData, {
           headers: {
@@ -51,11 +78,7 @@ const CreateRoom = () => {
         })
         .then((res) => {
           if (res.data.code == 200) {
-            window.location.href =
-              window.location.href.slice(
-                0,
-                window.location.href.indexOf("localhost") + 14
-              ) + "/admin/room-management";
+            window.location.href = "/admin/room-management";
           }
         });
     } catch (e) {
@@ -80,7 +103,16 @@ const CreateRoom = () => {
 
   return (
     <>
-      <h1 style={{ textAlign: "center", marginBottom: "30px" }}>Tạo phòng</h1>
+      <h1
+        style={{
+          textAlign: "center",
+          marginBottom: "30px",
+          fontFamily: "Dancing Script",
+          fontSize: "50px",
+        }}
+      >
+        Tạo phòng
+      </h1>
       <table className="table-room-management">
         <thead>
           <tr>

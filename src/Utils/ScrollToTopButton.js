@@ -4,12 +4,34 @@ import "../index.css";
 const ScrollToTopButton = () => {
   const [visible, setVisible] = useState(false);
 
+  useEffect(() => {
+    if (window.location.href.length != 22)
+      document.getElementsByClassName("background-header")[0].style.background =
+        "black";
+  }, []);
+
   const toggleVisible = () => {
     const scrolled = document.documentElement.scrollTop;
-    if (scrolled > 300) {
+    if (scrolled > 100) {
       setVisible(true);
-    } else if (scrolled <= 300) {
+      document.getElementsByClassName("background-header")[0].style.position =
+        "fixed";
+      document.getElementsByClassName("background-header")[0].style.top = 0;
+      document.getElementsByClassName("background-header")[0].style.background =
+        "black";
+      document.getElementsByClassName("background-header")[0].style.transition =
+        "background 1s";
+    } else if (scrolled <= 100) {
       setVisible(false);
+      document.getElementsByClassName("background-header")[0].style.position =
+        "relative";
+      if (
+        window.location.href.length == 22 ||
+        window.location.href == "http://localhost:3000/#rooms"
+      )
+        document.getElementsByClassName(
+          "background-header"
+        )[0].style.background = "hsla(0, 0%, 0%, 0)";
     }
   };
   const scrollToTop = () => {

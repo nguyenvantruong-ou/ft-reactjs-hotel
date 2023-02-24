@@ -7,7 +7,16 @@ import HeaderAdmin from "../../Admin/Header/HeaderAdmin";
 const HomeAdmin = () => {
   return (
     <>
-      <h1 style={{ textAlign: "center", marginBottom: "50px" }}>Doanh thu</h1>
+      <h1
+        style={{
+          textAlign: "center",
+          marginBottom: "20px",
+          fontFamily: "Dancing Script",
+          fontSize: "50px",
+        }}
+      >
+        Doanh thu
+      </h1>
       <div style={{ marginBottom: "200px" }}>
         <div>
           <Revenue />

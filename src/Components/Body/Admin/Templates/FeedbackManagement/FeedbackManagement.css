@@ -1,0 +1,151 @@
+.main-feedback-management {
+    width: 78%;
+    margin-left: 10%;
+    height: 700px;
+    background-color: rgb(231, 231, 231);
+    margin-bottom: 80px;
+    padding:20px;
+    display: flex;
+    border: 1px solid lightgray;
+}
+
+.user-feedback {
+    background-color: rgb(255, 255, 255);
+    width: 35%;
+    border: 1px solid lightgray;
+}
+
+.user-feedback > .search-user {
+    width: 95%;
+    height: 5%;
+    padding: 10px;
+}
+
+.user-feedback > .search-user > input {
+    width: 88%;
+    height: 100%;  
+    border-radius: 40px;
+    padding-left: 20px;
+    font-size: 17px;
+    transition: all 0.3s ease;
+}
+.user-feedback > .general-feedback {
+    overflow: auto;
+    height: 90%;
+}
+
+.item-user-feedback {
+    background-color: rgb(243, 243, 243);
+    width: 95%;
+    height: 80px;
+    margin-top: 5px;
+    margin-left: 10px;
+    display: flex;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.item-user-feedback:hover {
+    background-color: rgb(224, 224, 224);
+}
+
+.avatar-feedback {
+    width: 18%;
+    height: 80%;
+    padding: 8px 10px
+}
+.avatar-feedback img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.info-general-feedback {
+    font-size: 17px;
+    padding-top: 12px;
+}
+
+.info-general-feedback > div:first-child {
+    font-weight: 700;
+    margin-bottom: 5px;
+    display: flex;
+}
+
+.info-general-feedback > div:first-child > div:first-child {
+    width: 180px;
+}
+
+.info-general-feedback > div:first-child > div:last-child {
+    font-weight: 400;
+    font-size: 15px;
+    font-style: italic;
+}
+
+.info-general-feedback > div:last-child {
+    display: flex;
+}
+
+.info-general-feedback > div:last-child > div:first-child {
+    width: 220px;
+}
+
+.amount-user-fb {
+    margin-left: 10px;
+    padding:5px;
+    padding: 0 5px;
+    background-color: red;
+    border-radius: 50%;
+    color: white !important;
+}
+
+.content-feedback-ad {
+    background-color: rgb(255, 255, 255);
+    width: 70%;
+    height: 100%;
+    background-image: url("https://scr.vn/wp-content/uploads/2020/07/h%C3%ACnh-n%E1%BB%81n-tr%E1%BA%AFng-tinh-1024x648.jpg");
+}
+
+.content-feedback-ad > div:last-child {
+    overflow: auto;
+    height: 83%;
+}
+
+.header-content-feedback {
+    width: 95.5%;
+    height: 58px;
+    background-color: rgb(247, 247, 247);
+    padding-left: 40px;
+    display: flex;
+    margin-bottom: 50px;
+}
+
+.header-content-feedback img {
+    width: 70px;
+    height: 85%;
+    border-radius: 50%;
+    margin-top: 5px;
+}
+
+.header-content-feedback > div:last-child {
+    margin-top: 15px;
+    font-size: 20px;
+    font-weight: 700;
+    margin-left: 20px;
+}
+
+.main-content-feedback {
+    overflow: auto;
+    padding-left: 50px;
+    margin-top: 20px;
+    width: 80%;
+    margin-left: 5%;
+    border: 1px solid lightgray;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.title-feedback {
+    font-size: 17px;
+    font-weight: 700;
+}
+

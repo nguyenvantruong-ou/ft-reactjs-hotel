@@ -2,6 +2,7 @@ import React from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import $ from "jquery";
+import "./Login/SignIn.css";
 
 let listCountry = {};
 window.onload = function () {
@@ -177,6 +178,28 @@ const SignUp = () => {
     //     console.log("error: " + error);
     //     showAlertError("catch");
     // }
+    let timerInterval;
+    Swal.fire({
+      title: "Đang thực hiện ...",
+      html: "Quá trình sẽ kết thúc sau <b></b> mili giây.",
+      timer: 3500,
+      timerProgressBar: true,
+      didOpen: () => {
+        Swal.showLoading();
+        const b = Swal.getHtmlContainer().querySelector("b");
+        timerInterval = setInterval(() => {
+          b.textContent = Swal.getTimerLeft();
+        }, 100);
+      },
+      willClose: () => {
+        clearInterval(timerInterval);
+      },
+    }).then((result) => {
+      /* Read more about handling dismissals below */
+      if (result.dismiss === Swal.DismissReason.timer) {
+        console.log("I was closed by the timer");
+      }
+    });
 
     try {
       const results = await axios.post(
@@ -185,9 +208,7 @@ const SignUp = () => {
       );
       console.log(results);
       document.cookie = "Email=" + results["data"]["data"] + "end-email"; // check
-      window.location.href =
-        window.location.href.slice(0, window.location.href.indexOf("/auth")) +
-        "/auth/confirm-account";
+      window.location.href = "/auth/confirm-account";
     } catch (e) {
       console.log(e);
       showAlertError(e["response"]["data"]["message"]);
@@ -196,8 +217,13 @@ const SignUp = () => {
 
   return (
     <>
-      <h1 className="h1-title">Đăng ký</h1>
-      <form style={{ paddingLeft: "40%" }}>
+      <h1
+        className="h1-title"
+        style={{ fontFamily: "Dancing Script", fontSize: "42px" }}
+      >
+        Đăng ký
+      </h1>
+      <form style={{ paddingLeft: "40%" }} className="input-css">
         <div style={{ marginBottom: "10px" }}>
           <label>
             Họ: <br />
@@ -228,7 +254,7 @@ const SignUp = () => {
               defaultChecked
               type="radio"
               name="gender"
-              style={{ marginLeft: "70px" }}
+              style={{ marginLeft: "36px" }}
               value="Nam"
             />
             Nam
@@ -286,7 +312,6 @@ const SignUp = () => {
         {/* // address */}
         <div style={{ marginBottom: "10px" }}>
           <label>
-            {" "}
             <span style={{ fontSize: "17px" }}>Địa chỉ:</span> <br />
             <div className="row">
               <div className="form-group col-lg-4">
@@ -296,7 +321,7 @@ const SignUp = () => {
                 <select
                   path="userCity"
                   id="city"
-                  style={{ width: "215px", height: "30px" }}
+                  style={{ width: "232px", height: "30px" }}
                   onClick={setDistricts}
                 ></select>
               </div>
@@ -308,7 +333,7 @@ const SignUp = () => {
                   path="userDistrict"
                   id="district"
                   style={{
-                    width: "215px",
+                    width: "232px",
                     height: "30px",
                     marginTop: "5px",
                     marginBottom: "5px",
@@ -364,9 +389,9 @@ const SignUp = () => {
           </label>
         </div>
 
-        <button id="button" type="button" onClick={checkValue}>
-          Đăng ký{" "}
-        </button>
+        <div class="middle" onClick={checkValue}>
+          <a class="btn btn1">Đăng ký</a>
+        </div>
       </form>
       <br />
       <br />

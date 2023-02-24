@@ -6,6 +6,7 @@ import { AlertOk } from "../../../Alert/AlertOk";
 import { AlertError } from "../../../Alert/Error";
 import "../../Home.css";
 import "../RoomDetail/Room.css";
+import CheckRefreshToken from "../../../../Utils/CheckRefreshToken";
 
 const Comment = () => {
   const [flag, setFlag] = useState(false);
@@ -17,6 +18,7 @@ const Comment = () => {
       RoomId: id,
       UserId: localStorage.getItem("Id"),
     };
+    CheckRefreshToken();
     fetch(api, {
       method: "POST",
       headers: {
@@ -32,7 +34,6 @@ const Comment = () => {
         } else AlertError(res.message);
       })
       .catch((error) => {
-        AlertError(error.message);
         console.log("error", error);
       });
   };
@@ -50,7 +51,7 @@ const Comment = () => {
       Incognito: document.getElementById("incognito").checked,
       ParentId: 0,
     };
-
+    CheckRefreshToken();
     fetch(api, {
       method: "POST",
       headers: {
@@ -89,10 +90,7 @@ const Comment = () => {
           {flag == false ? (
             <>
               <p style={{ textAlign: "center", marginBottom: "50px" }}>
-                <i>
-                  Bạn chưa trải nghiệm hoặc chưa thanh toán dịch vụ của chúng
-                  tôi!
-                </i>
+                <i>Bạn chỉ được đánh giá khi thanh toán hóa đơn thành công!</i>
               </p>
             </>
           ) : (

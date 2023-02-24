@@ -1,0 +1,51 @@
+$clouds: #ecf0f1;
+$turquoise: #1abc9c;
+$greensea: #16a085;
+$night: #636363;
+$midnight: #1f2225;
+$transition: all .5s ease;
+
+/* Hide the input */
+#chck-account {
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
+}
+.check-trail {
+  display: flex;
+  align-items: center;
+  width: 60px;
+  height: 27px;
+  background: $midnight;
+  border-radius: 2.5em;
+  transition: $transition;
+  cursor: pointer;
+}
+.check-handler {
+  display: flex;
+  margin-left: 3px;
+  justify-content: center;
+  align-items: center;
+  width: 22px;
+  height: 22px;
+  background: $night;
+  border-radius: 50%;
+  transition: $transition;
+  box-shadow: 0 0 8px rgba(0,0,0,0.3);
+  &:before {
+    content: "\00D7";
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+  }
+}
+#chck-account:checked + .check-trail {
+  background: $greensea;
+  .check-handler {
+    margin-left: 35px;
+    background: $turquoise;
+    &::before {
+      content: "\2714"
+    }
+  }
+}

@@ -17,10 +17,11 @@ import History from "./Components/Body/Client/History";
 
 //
 import { Routes, Route } from "react-router-dom";
-import SignIn from "./Components/Body/Client/SignIn";
+import SignIn from "./Components/Body/Client/Login/SignIn";
 import ForgotPassword from "./Components/Body/Client/ForgotPassword.js";
 import Profile from "./Components/Body/Client/Profile";
 import ChangePassword from "./Components/Body/Client/ChangePassword";
+import HandingPayment from "./Components/Body/Client/HandingPayment";
 
 // admin
 import HeaderAdmin from "./Components/Body/Admin/Header/HeaderAdmin.js";
@@ -36,10 +37,16 @@ import Visitor from "./Components/Body/Admin/Templates/Statistic/Visitor";
 import VisitorTotal from "./Components/Body/Admin/Templates/Statistic/VisitorTotal";
 import ListOrder from "./Components/Body/Client/ListOrder";
 import CreateOrder from "./Components/Body/Client/CreateOrder";
+import FeedbackManagement from "./Components/Body/Admin/Templates/FeedbackManagement/FeedbackManagement";
+import RevenuePerRooms from "./Components/Body/Admin/Templates/Statistic/RevenuePerRooms";
+
+import Remind from "./Utils/RemindToChangePw";
+import Phone from "./Utils/Phone";
 
 function App() {
   return (
     <>
+      {localStorage.setItem("IsPending", false)}
       {window.location.href.slice(
         window.location.href.indexOf("localhost") + 15,
         window.location.href.indexOf("localhost") + 20
@@ -48,6 +55,10 @@ function App() {
           <HeaderAdmin />
           <Routes>
             <Route path="/admin" element={<HomeAdmin />}></Route>
+            <Route
+              path="/admin/revenue-per-rooms"
+              element={<RevenuePerRooms />}
+            ></Route>
             <Route
               path="/admin/visitor-total"
               element={<VisitorTotal />}
@@ -84,6 +95,10 @@ function App() {
               path="/admin/service-management"
               element={<ServiceManagement />}
             ></Route>
+            <Route
+              path="/admin/feedback-management"
+              element={<FeedbackManagement />}
+            ></Route>
           </Routes>
           <Footer />
         </>
@@ -111,11 +126,17 @@ function App() {
             <Route path="/profile" element={<Profile />}></Route>
             <Route path="/change-password" element={<ChangePassword />}></Route>
             <Route path="/room/:id/:slug" element={<RoomDetail />}></Route>
+            <Route
+              path="/payment/handling/:id/:key/:total"
+              element={<HandingPayment />}
+            ></Route>
           </Routes>
-          <ScrollToTopButton />
           <Footer />
+          <Phone />
         </>
       )}
+      <ScrollToTopButton />
+      <Remind />
     </>
   );
 }

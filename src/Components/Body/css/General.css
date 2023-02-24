@@ -1,9 +1,10 @@
+
 /* Forgot password */
 .button-send-pw {
     background-color: lightgreen;
     margin-left: 10px;
-    height: 34px;
-    width: 40px;
+    height: 43px;
+    width: 50px;
     border: 1px solid green;
 }
 
@@ -35,12 +36,12 @@
 /* profile */
 
 .main-profile {
-    background: rgb(197 234 235 / 43%);
+    background: rgb(219 219 219 / 27%);
     /* background: linear-gradient(135deg, rgb(255, 255, 255) 0%,     rgba(255, 255, 255, 0.726) 100%); */ 
     width: 50%;
     height: 700px;
     border: 1px solid black;
-    border-radius: 2%;
+    border-radius: 5px;
     margin: 50px auto;
     margin-bottom: 70px;
 }
@@ -65,7 +66,7 @@
 
 #profile-ul {
     list-style-type: none;
-    margin-left: 154px;
+    margin-left: 164px;
     margin-top: 30px;
 }
 
@@ -74,7 +75,7 @@
 }
 
 .change-pw-profile {
-    margin-left: 23%;
+    margin-left: 24%;
     margin-top: 50px;
     color: blue;
 }
@@ -87,7 +88,7 @@
     background-color: rgb(63, 204, 63);
     border: 1pX solid green;
     padding: 5px;
-    margin-left: 32%;
+    margin-left: 31.5%;
     margin-top: 50px;
     opacity: 0;
 }
@@ -110,7 +111,7 @@
 
 /* change pasword */
 .change-pw-main {
-    background: rgb(197 234 235 / 43%);
+    background: rgb(219 219 219 / 27%);
     /* background: linear-gradient(135deg, rgb(255, 255, 255) 0%,     rgba(255, 255, 255, 0.726) 100%); */ 
     width: 40%;
     height: 300px;
@@ -128,7 +129,7 @@
     background-color: rgb(63, 204, 63);
     border: 1pX solid green;
     padding: 5px;
-    margin-left: 65%;
+    margin-left: 68.5%;
     margin-top: 30px;
 }
 
@@ -214,8 +215,8 @@
 
 /* history */
 .main-history {
-    width: 80%;
-    margin-left: 10%;
+    width: 85%;
+    margin-left: 7.5%;
     margin-bottom: 50px;
     padding-bottom: 30px;
     padding-top: 1px;
@@ -313,9 +314,174 @@
     cursor: pointer;
 }
 
+.form-info-of-customer {
+    display: flex;
+}
+
+.form-info-of-customer > div {
+    width: 50%;
+}
+
+.form-info-of-customer input {
+    width: 70%;
+    height: 30px;
+    padding: 5px;
+    padding-left: 10px;
+    margin-bottom: 30px;
+    font-size: 17px;
+}
+
+.form-info-of-customer input:focus {
+    box-shadow: 3px 3px 3px 3px #d8d8d8;
+    animation-duration: 2s;
+    background-color: #fcfcfc;
+}
+
 /* staff create new order  */
 
 .list-acc-create-order {
-    height: 300px;
-    overflow: auto;
+    height: 310px;
 }
+
+/* feedback */
+.main-feedback {
+    width: 70%;
+    margin-left: 15%;
+    margin-bottom: 100px;
+    margin-top: 50px;
+    background-color: #fdfdfd;
+    border: 1px solid gray;
+    padding: 30px;
+    text-align: center;
+    padding-bottom: 70px;
+}
+
+.main-feedback h3 {
+    margin-left: 50px;
+}
+
+.header-feedback {
+    display: flex;
+    text-align: center;
+    margin-left: 45%;
+}
+
+.header-feedback > div:first-child {
+    font-size: 30px;
+    font-weight: 600;
+    margin-right: 65%;
+    font-family: cursive;
+}
+
+.header-feedback  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.main-feedback > i {
+    font-size: 17px;
+}
+
+.rating-feedback {
+    text-align: left;
+    margin-top: 30px;
+    margin-left: 10px;
+}
+
+.rating-icon > svg:first-child {
+    margin-left: 150px;
+}
+
+.rating-icon > svg {
+    margin-left: 40px;
+    cursor: pointer;
+}
+
+.rating-icon > svg:hover {
+    color: #b99171;
+}
+
+.type-feedback {
+    text-align: left;
+    margin-top: 30px;
+    margin-left: 10px;
+}
+
+.type-feedback > div{
+    padding-left: 80px;
+    font-size: 18px;
+}
+
+.type-feedback > div:last-child {
+    padding-left: 90px;
+    margin-top: 10px;
+}
+
+.type-feedback > div:last-child > input {
+    padding: 5px;
+    font-size: 18px;
+}
+
+.content-feedback {
+    text-align: left;
+    margin-top: 30px;
+    margin-left: 10px;
+}
+
+.content-feedback > textarea {
+    margin-left: 90px;
+    padding: 10px;
+    width: 85%;
+    height: 100px;
+    font-size: 18px;
+    resize: none;
+}
+
+.captcha-feedback {
+    margin-left: 100px;
+    margin-top: 30px;
+    display: flex;
+}
+
+.captcha-code {
+    width: 120px;
+    height: 30px;
+    background-image: url("https://oe.amizone.net/login-files/bg-captcha.png");
+    padding: 5px;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: 5px;
+    user-select: none;
+    border: 1px solid black;
+    font-size: 20px;
+}
+
+.captcha-feedback i:hover {
+    color: #0004ff;
+    cursor: pointer;
+}
+
+.feedback-btn {
+    text-align: right;
+    margin-right: 80px;
+    opacity: 0;
+}
+
+.feedback-btn > input {
+    width: 80px;
+    height: 30px;
+    background-color: #71e685;
+    border: 1px solid green;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.feedback-btn > input:hover {
+    background-color: #278537;
+    color: white;
+}
+
+.feedback-btn > input:focus {
+    border: 1px solid #0004ff00;
+} 

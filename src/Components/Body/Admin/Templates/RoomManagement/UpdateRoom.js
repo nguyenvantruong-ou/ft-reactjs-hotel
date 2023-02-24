@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { URL } from "../../../../../Utils/Url";
 import axios from "axios";
 import { AlertError } from "../../../../Alert/Error";
+import Swal from "sweetalert2";
+import CheckRefreshToken from "../../../../../Utils/CheckRefreshToken";
 
 const UpdateRoomAdmin = () => {
   const { id } = useParams();
@@ -28,6 +30,7 @@ const UpdateRoomAdmin = () => {
 
   const GetDataRoom = () => {
     let api = URL + "RoomManagement/room/" + id;
+    CheckRefreshToken();
     fetch(api, {
       method: "GET",
       headers: {
@@ -43,6 +46,7 @@ const UpdateRoomAdmin = () => {
 
   const GetDataRoomImage = async () => {
     let api = URL + "RoomManagement/room-images/" + id;
+    CheckRefreshToken();
     await fetch(api, {
       method: "GET",
       headers: {
@@ -94,6 +98,7 @@ const UpdateRoomAdmin = () => {
     console.log([...formData]);
 
     try {
+      CheckRefreshToken();
       axios
         .put(URL + "RoomManagement/room", formData, {
           headers: {
@@ -102,22 +107,48 @@ const UpdateRoomAdmin = () => {
         })
         .then((res) => {
           if (res.data.code == 200) {
-            window.location.href =
-              window.location.href.slice(
-                0,
-                window.location.href.indexOf("localhost") + 14
-              ) + "/admin/room-management";
+            window.location.href = "/admin/room-management";
           }
         });
     } catch (e) {
       console.log(e);
       AlertError(e["response"]["data"]["message"]);
     }
+
+    let timerInterval;
+    Swal.fire({
+      title: "Đang cập nhật ...",
+      html: "Quá trình sẽ kết thúc sau <b></b> mili giây.",
+      timer: 6500,
+      timerProgressBar: true,
+      didOpen: () => {
+        Swal.showLoading();
+        const b = Swal.getHtmlContainer().querySelector("b");
+        timerInterval = setInterval(() => {
+          b.textContent = Swal.getTimerLeft();
+        }, 100);
+      },
+      willClose: () => {
+        clearInterval(timerInterval);
+      },
+    }).then((result) => {
+      /* Read more about handling dismissals below */
+      if (result.dismiss === Swal.DismissReason.timer) {
+        console.log("I was closed by the timer");
+      }
+    });
   };
 
   return (
     <>
-      <h1 style={{ textAlign: "center", marginBottom: "30px" }}>
+      <h1
+        style={{
+          textAlign: "center",
+          marginBottom: "30px",
+          fontFamily: "Dancing Script",
+          fontSize: "50px",
+        }}
+      >
         Cập nhật thông tin phòng
       </h1>
       <table className="table-room-management">

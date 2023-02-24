@@ -5,6 +5,7 @@ import { AlertOk } from "../../../../Alert/AlertOk";
 import { AlertError } from "../../../../Alert/Error";
 import { CanvasJSChart } from "canvasjs-react-charts";
 import { redirect } from "react-router-dom";
+import CheckRefreshToken from "../../../../../Utils/CheckRefreshToken";
 
 const Revenue = () => {
   const [rooms, setRooms] = useState([]);
@@ -14,6 +15,7 @@ const Revenue = () => {
       URL +
       "Statistics/revenue?Year=" +
       document.getElementById("year-sta").value;
+    CheckRefreshToken();
     fetch(api, {
       method: "GET",
       headers: {
